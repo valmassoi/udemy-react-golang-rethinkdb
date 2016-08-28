@@ -1,0 +1,27 @@
+{
+  "name": "udemy-react-golang-rethinkdb",
+  "version": "1.0.0",
+  "description": "Build Realtime Apps using `React.js`, `Golang`, and `RethinkDB`",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valmassoi/udemy-react-golang-rethinkdb.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/valmassoi/udemy-react-golang-rethinkdb/issues"
+  },
+  "homepage": "https://github.com/valmassoi/udemy-react-golang-rethinkdb#readme",
+  "devDependencies": {
+    "babel-loader": "^5.3.3"
+  },
+  "dependencies": {
+    "fecha": "^2.2.0",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1"
+  }
+}
