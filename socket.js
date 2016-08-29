@@ -10,6 +10,9 @@ class Socket {
   }
   on(name, fn) {
     this.ee.on(name, fn)
+    this.ee.on('error', (err) => {
+      console.log('whoops! there was an error');
+    });
   }
   off(name, fn) {
     this.ee.removeListener(name, fn)
@@ -21,6 +24,7 @@ class Socket {
   message(e) {
     try{
       const message = JSON.parse(e.data)
+      console.log(message);
       this.ee.emit(message.name, message.data)
     }
     catch(err) {

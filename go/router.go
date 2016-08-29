@@ -4,23 +4,26 @@ import (
   "github.com/gorilla/websocket"
   "fmt"
   "net/http"
+  r "github.com/dancannon/gorethink"
 )
 
 type Handler func(*Client, interface{})
 
 var upgrader = websocket.Upgrader{
-  ReadBufferSize: 1024,
+  ReadBufferSize:  1024,
   WriteBufferSize: 1024,
-  CheckOrigin: func(r *http.Request) bool { return true },
+  CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
 type Router struct {
-  rules map[string]Handler
+  rules   map[string]Handler
+  session *r.Session
 }
 
-func NewRouter() *Router{
+func NewRouter(session *r.Session) *Router {
   return &Router{
-    rules: make(map[string]Handler),
+    rules:   make(map[string]Handler),
+    session: session,
   }
 }
 
@@ -33,14 +36,16 @@ func (r *Router) FindHandler(msgName string) (Handler, bool) {
   return handler, found
 }
 
-func (e *Router) ServeHTTP(w http.ResponseWriter, r *http.Request){
+func (e *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   socket, err := upgrader.Upgrade(w, r, nil)
   if err != nil {
     w.WriteHeader(http.StatusInternalServerError)
     fmt.Fprint(w, err.Error())
     return
   }
-  client := NewClient(socket, e.FindHandler)
+  client := NewClient(socket, e.FindHandler, e.session)
+  defer client.Close()
   go client.Write()
   client.Read()
+
 }
